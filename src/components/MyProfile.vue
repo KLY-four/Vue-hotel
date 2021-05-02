@@ -10,7 +10,7 @@
         <mu-row>
           <mu-col span="12">
             <mu-card class="ProfileCard" raised>
-              <mu-card-header :title="'用户名： ' + userInfo.username" :sub-title="'用户ID号:  ' + userInfo.userId">
+              <mu-card-header :title="'Vip用户： ' + userInfo.username" :sub-title="'用户ID号:  ' + userInfo.userId">
                 <mu-avatar slot="avatar">
                   <mu-icon value="person"></mu-icon>
                 </mu-avatar>
@@ -66,6 +66,7 @@
               userId: 0,
               username: "username",
               createTime: null,
+              vip: Cookies.get("vip")
             },
         }
       },

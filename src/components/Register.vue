@@ -2,7 +2,7 @@
   <div class="login-container" >
     <mu-card class="login-card" raised>
       <mu-form ref="form" :model="validateForm" label-position="left" label-width="100" class="mu-demo-form">
-        <mu-card-title title="HO大酒店" sub-title="用户注册"></mu-card-title>
+        <mu-card-title title="银河大酒店" sub-title="用户注册"></mu-card-title>
         <mu-card-text>
           <mu-form-item label="用户名" help-text="" prop="username" :rules="rules.notNull">
             <mu-text-field v-model="validateForm.username"></mu-text-field>
@@ -24,13 +24,21 @@
             <mu-text-field v-model="validateForm.email"></mu-text-field>
           </mu-form-item>
           <mu-form-item label="手机号" help-text="" prop="phone" :rules="rules.notNull" >
-            <mu-text-field v-model="validateForm.phone"></mu-text-field>
+            <mu-text-field v-model="validateForm.phone" @blur="Ipchecke(validateForm.phone)" @focus="Ipchecke1(validateForm.phone)"></mu-text-field>
+            <div id="div1"></div>
           </mu-form-item>
           <mu-form-item label="地址" help-text="" prop="address" :rules="rules.notNull">
             <mu-text-field v-model="validateForm.address"></mu-text-field>
           </mu-form-item>
           <mu-form-item label="身份证号" help-text="" prop="idcard" :rules="rules.notNull">
-            <mu-text-field v-model="validateForm.idcard"></mu-text-field>
+            <mu-text-field v-model="validateForm.idcard" @blur="Idchecke(validateForm.idcard)" @focus="Idchecke1(validateForm.idcard)"></mu-text-field>
+            <div id="div"></div>
+          </mu-form-item>
+
+          <mu-form-item prop="vip" label="是否注册会员"  :rules="rules.notNull">
+            <mu-radio v-model="validateForm.vip" value="true" label="是"></mu-radio>
+            <mu-radio v-model="validateForm.vip" value="false" label="否"></mu-radio>
+            <span style="color: blue">提示:会员享有部分房间订购折扣优惠</span>
           </mu-form-item>
             <mu-button flat @click="navigateTo('/login')">已有账号？立即登录</mu-button>
         </mu-card-text>
@@ -48,9 +56,10 @@
 <script>
 
     import {userRegister} from "@/api/user";
+    import Cookies from 'js-cookie';
 
     export default {
-        name: "Register",
+      name: "Register",
       data () {
         return {
           validateForm: {
@@ -58,11 +67,12 @@
             password: '',
             password2: '',
             name: '',
-            gender: '男',
+            gender: '',
             phone: '',
             email: '',
             address: '',
             idcard: '',
+            vip: ''
           },
           rules: {
             notNull: [
@@ -84,9 +94,36 @@
         navigateTo(val){
           this.$router.push(val);
         },
+        Idchecke(value){
+          if(value==''){
+            return false;
+          }
+          var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+          if(!reg.test(value)){
+            document.getElementById("div").innerHTML="<span style='color: red;font-size: small'>身份证不合法</span>"
+            return false;
+          }
+          return true;
+        },
+        Idchecke1(value){
+          document.getElementById("div").innerHTML=''
+        },
+        Ipchecke(value){
+          if(value==''){
+            return false;
+          }
+          var reg = /^1[3456789]\d{9}$/;
+          if(!reg.test(value)){
+            document.getElementById("div1").innerHTML="<span style='color: red;font-size: small'>手机号不合法</span>"
+            return false;
+          }
+          return true;
+        },
+        Ipchecke1(value){
+          document.getElementById("div1").innerHTML=''
+        },
         submit () {
           this.$refs.form.validate().then((result) => {
-            console.log(result)
             if (result == false) {
               this.$toast.warning("请输入必填项！")
               return
@@ -111,10 +148,15 @@
         },
         login() {
           // this.btnLoading = true
+          if(!this.Idchecke(this.validateForm.idcard)){
+            return;
+          }
+          if(!this.Ipchecke(this.validateForm.phone)){
+            return;
+          }
           userRegister(this.validateForm).then(res => {
-            console.log(res);
             if (res.data === 1){
-              this.$toast.success("注册成功")
+              this.$toast.success("注册成功,请登录")
               this.navigateTo('/login')
             }else if (res === 0) {
               this.$toast.message("请检查信息是否填写正确")

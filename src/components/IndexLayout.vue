@@ -7,12 +7,19 @@
     <mu-button flat  @click="navigateTo('/')"><h2>银河酒店</h2></mu-button>
     <mu-menu slot="right" open-on-hover v-if="this.isLogin()">
       <mu-button flat>
-        <mu-chip class="demo-chip" color="primary">
+
+        <mu-chip class="demo-chip" color="primary" v-if="vip=='true'">
           <mu-avatar :size="32" color="secondary">
             <mu-icon value="account_circle"> </mu-icon>
           </mu-avatar>
-          {{ username  }}
+          {{ username}}<span style="color: chartreuse" title="vip用户享受部分房间折扣">&nbsp;&nbsp;vip用户</span>
         </mu-chip>
+        <mu-chip class="demo-chip" color="primary" v-else>
+         <mu-avatar :size="32" color="secondary">
+           <mu-icon value="account_circle"> </mu-icon>
+         </mu-avatar>
+         {{ username}}<span style="color: chartreuse">&nbsp;&nbsp;普通用户</span>
+       </mu-chip>
       </mu-button>
       <mu-list slot="content" >
         <mu-list-item button @click="navigateTo('/myProfile')">
@@ -84,13 +91,16 @@
 </template>
 
 <script>
+  import imgs from '../assets/imgs/vip.jpg'
   import Cookies from 'js-cookie'
   import { getAllHotel } from "@/api/hotel"
     export default {
         name: "Index",
       data() {
         return {
+          img:imgs,
           username : Cookies.get("username"),
+          vip:Cookies.get("vip"),
           open: false,
           docked: false,
           right: false,
@@ -111,10 +121,12 @@
           Cookies.remove("user_id")
           Cookies.remove("session")
           Cookies.remove("order_id")
+          Cookies.remove("vip")
           this.navigateTo("/login")
         },
         fetchData(){
           getAllHotel().then(res => {
+            console.log(res)
             this.hotelInfo = res.data[0]
           }).catch(err => {
             console.log(err)

@@ -21,6 +21,10 @@
                     <mu-list-item-action><mu-icon value="hotel"></mu-icon></mu-list-item-action>
                     <mu-list-item-title>房间类型： {{ order.roomType }}</mu-list-item-title>
                   </mu-list-item>
+                  <mu-list-item>
+                    <mu-list-item-action><mu-icon value="home"></mu-icon></mu-list-item-action>
+                    <mu-list-item-title>房间号： {{ order.roomNumber }}</mu-list-item-title>
+                  </mu-list-item>
                   <mu-list-item v-show="order.orderStatus === 2">
                     <mu-list-item-action><mu-icon value="hotel"></mu-icon></mu-list-item-action>
                     <mu-list-item-title>房间号码： 102</mu-list-item-title>
@@ -30,12 +34,12 @@
                     <mu-list-item-title>预订日期:{{ order.orderDate | formatDate }}到{{ order.orderDate | addDate(order.orderDays) }}</mu-list-item-title>
                   </mu-list-item>
                   <mu-list-item>
-                    <mu-list-item-action><mu-icon value="phone"></mu-icon></mu-list-item-action>
+                    <mu-list-item-action><mu-icon value="subject"></mu-icon></mu-list-item-action>
                     <mu-list-item-title>预订天数： {{ order.orderDays }}</mu-list-item-title>
                   </mu-list-item>
                   <mu-list-item>
-                    <mu-list-item-action><mu-icon value="fingerprint"></mu-icon></mu-list-item-action>
-                    <mu-list-item-title>入住人数： {{ order.name }}</mu-list-item-title>
+                    <mu-list-item-action><mu-icon value="account_box"></mu-icon></mu-list-item-action>
+                    <mu-list-item-title>入住人： {{ order.name }}</mu-list-item-title>
                   </mu-list-item>
                   <mu-list-item>
                     <mu-list-item-action><mu-icon value="phone"></mu-icon></mu-list-item-action>
@@ -73,8 +77,8 @@
         <mu-button slot="actions" flat color="error" @click="openPass = false">取消</mu-button>
         <mu-button slot="actions" flat color="primary" @click="pay()">确认付款</mu-button>
       </mu-dialog>
-      <mu-dialog title="取消订单" width="360" :open.sync="openCancel" :loading="cancelLoading">
-        确认取消订单吗？
+      <mu-dialog title="房间退订" width="360" :open.sync="openCancel" :loading="cancelLoading">
+        确认退订房间吗？
         <mu-button slot="actions" flat color="secondary" @click="openCancel = false">返回</mu-button>
         <mu-button slot="actions" flat color="primary" @click="cancelOrder()">确认取消</mu-button>
       </mu-dialog>
@@ -126,12 +130,12 @@
             }).catch(err => {
               this.$toast.error(err)
             })
-            const userId = Cookie.get("user_id")
+           /* const userId = Cookie.get("user_id")
             getUserInfo().then(res => {
               this.userInfo = res.data;
             }).catch(err => {
               this.$toast.error(err)
-            })
+            })*/
           },
         getStaColor(val){
           var status = ''

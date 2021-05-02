@@ -27,6 +27,7 @@
                 </mu-list-item-title>
                 <mu-list-item-sub-title>预订日期：{{ order.orderDate | formatDate }} 到 {{ order.orderDate | addDate(order.orderDays) }}</mu-list-item-sub-title>
                 <mu-list-item-sub-title>订单消费：￥ {{ order.orderCost }}</mu-list-item-sub-title>
+                <mu-list-item-sub-title>房间号： {{ order.roomNumber }}</mu-list-item-sub-title>
               </mu-list-item-content>
               <mu-list-item-action>
                 <div v-if="order.orderStatus===3">
@@ -45,7 +46,7 @@
         <mu-card-title title="暂无订单" sub-title=""></mu-card-title>
         <mu-card-text>
           <mu-button @click="navigateTo('/')">回到首页</mu-button>
-          <mu-button >浏览客房</mu-button>
+          <mu-button @click="room">浏览客房</mu-button>
         </mu-card-text>
 
       </mu-card>
@@ -94,6 +95,12 @@
               break;
           }
           return status
+        },
+        room(){
+          this.$router.push({
+            path: '/room',
+            name: 'Room',
+          })
         },
         toDetail(id){
           Cookie.set("order_id",id)

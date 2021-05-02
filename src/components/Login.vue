@@ -81,6 +81,7 @@
               Cookies.set('username',this.validateForm.username)  //免登录功能
               Cookies.set('session',response.data.sessionId)
               Cookies.set('user_id',response.data.userId)
+              Cookies.set("vip",response.data.vip)
               this.navigateTo('/')
             }else if (response.code !== 1000) {
               this.$toast.error(response.message)

@@ -52,10 +52,27 @@
                       <mu-icon left value="local_atm"></mu-icon>
                       价格：￥{{ rt.price }}
                     </span>
-                    <span>
+                    <span >
+                      <div v-if="vip==null">
+                      <mu-icon left value="arrow_downward" ></mu-icon>
+                        折扣：<span style="color: darkorange">登录后查看折扣</span>
+                      </div>
+
+                      <div v-else-if="vip!=null && vip=='true'">
+                      <mu-icon left value="arrow_downward" ></mu-icon>
+                        折扣：<span style="color: blue">{{ rt.discount }}折</span>
+                      </div>
+
+                      <div v-else-if="vip!=null && vip=='false'">
+                      <mu-icon left value="arrow_downward" ></mu-icon>
+                        折扣：<span style="color:red;">普通用户暂不享受折扣优惠</span>
+                      </div>
+                    </span>
+                   <!-- <span v-else-if="vip!=null && vip='true'">
                     <mu-icon left value="arrow_downward"></mu-icon>
+                      登录后查看折扣
                       折扣：{{ rt.discount }}%
-                  </span>
+                  </span>-->
                   </mu-list-item>
                   <mu-list-item :ripple="true">
                     <span >
@@ -81,11 +98,13 @@
 
 <script>
   import { getAllRoomType } from '@/api/roomType'
+  import Cookies from 'js-cookie'
     export default {
         name: "Room",
       data(){
           return{
             roomTypeList: null,
+            vip:Cookies.get("vip")
           }
       },
       created: function(){

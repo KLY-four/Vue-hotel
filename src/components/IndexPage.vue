@@ -107,6 +107,7 @@
     fetchData(){
       getAllHotel().then(res => {
         this.hotelInfo = res.data[0]
+        console.log(this.hotelInfo)
       }).catch(err => {
         console.log(err)
         this.$toast.error(err.toString())
